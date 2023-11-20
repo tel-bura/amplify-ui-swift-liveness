@@ -90,7 +90,7 @@ class LivenessCaptureSession {
         output.connections
             .filter(\.isVideoOrientationSupported)
             .forEach {
-                $0.videoOrientation = .portrait
+                $0.videoOrientation = self.getOrientation()
         }
 
         if captureSession.canAddOutput(output) {
