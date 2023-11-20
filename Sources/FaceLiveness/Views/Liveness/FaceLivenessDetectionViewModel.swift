@@ -151,13 +151,13 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         let rect = CGRect(
             x: ovalParameters.boundingBox.x,
             y: ovalParameters.boundingBox.y,
-            width: (ovalParameters.boundingBox.width / 10) * 7,
-            height: (ovalParameters.boundingBox.height / 10) * 7
+            width: (ovalParameters.boundingBox.width / 10) * 9,
+            height: (ovalParameters.boundingBox.height / 10) * 9
         )
 
         let normalizedOvalRect = CGRect(
-            x: rect.minX,
-            y: rect.minY,
+            x: rect.midX,
+            y: rect.midY,
             width: rect.width,
             height: rect.height
         )
