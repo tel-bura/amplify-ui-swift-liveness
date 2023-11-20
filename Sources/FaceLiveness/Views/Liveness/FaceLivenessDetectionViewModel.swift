@@ -148,7 +148,6 @@ class FaceLivenessDetectionViewModel: ObservableObject {
               let ovalParameters = sessionConfiguration?.ovalMatchChallenge.oval
         else { return }
 
-        let scaleRatio = 1
         let rect = CGRect(
             x: (ovalParameters.boundingBox.x / 10) * 9,
             y: (ovalParameters.boundingBox.y / 10) * 9,
@@ -157,10 +156,10 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         )
 
         let normalizedOvalRect = CGRect(
-            x: rect.minX * scaleRatio,
-            y: rect.minY * scaleRatio,
-            width: rect.width * scaleRatio,
-            height: rect.height * scaleRatio
+            x: rect.minX,
+            y: rect.minY,
+            width: rect.width,
+            height: rect.height
         )
 
         livenessViewControllerDelegate?.drawOvalInCanvas(normalizedOvalRect)
