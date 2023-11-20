@@ -25,7 +25,7 @@ class LivenessCaptureSession {
 
         do {
             try camera.lockForConfiguration()
-            let zoomFactor:CGFloat = 0.7
+            let zoomFactor:CGFloat = 1.0
             camera.videoZoomFactor = zoomFactor
             camera.unlockForConfiguration()
         } catch {
