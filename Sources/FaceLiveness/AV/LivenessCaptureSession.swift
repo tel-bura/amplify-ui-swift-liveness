@@ -106,8 +106,24 @@ class LivenessCaptureSession {
     ) -> AVCaptureVideoPreviewLayer {
         let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.videoGravity = .resizeAspectFill
-        previewLayer.connection?.videoOrientation = .portrait
+        previewLayer.connection?.videoOrientation = self.getOrientation()
         previewLayer.frame = frame
         return previewLayer
+    }
+    
+    private func getOrientation() -> AVCaptureVideoOrientation {
+      if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
+        return AVCaptureVideoOrientation.landscapeLeft
+      } else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
+        return AVCaptureVideoOrientation.landscapeRight
+      } else {
+        if UIApplication.shared.statusBarOrientation == .landscapeLeft {
+          return AVCaptureVideoOrientation.landscapeLeft
+        } else if UIApplication.shared.statusBarOrientation == .landscapeRight {
+          return AVCaptureVideoOrientation.landscapeRight
+        } else {
+          return AVCaptureVideoOrientation.portrait
+        }
+      }
     }
 }
