@@ -150,7 +150,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
 
         let scaleRatio = cameraViewRect.width / videoSize.width
         let rect = CGRect(
-            x: 200,
+            x: 150,
             y: 140,
             width: ovalParameters.boundingBox.width / 2,
             height: ovalParameters.boundingBox.height / 2

@@ -33,7 +33,7 @@ final class _LivenessViewController: UIViewController {
         viewModel.normalizeFace = { [weak self] face in
             guard let self = self else { return face }
             return DispatchQueue.main.sync {
-                face.normalize(width: self.view.frame.width, height: self.view.frame.width / 3 * 4)
+                face.normalize(width: self.view.frame.width, height: self.view.frame.width)
             }
         }
     }
