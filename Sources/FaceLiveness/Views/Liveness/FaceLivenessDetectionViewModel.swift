@@ -167,8 +167,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         let rect = CGRect(
             x: screenWidthMid - (ovalWidth / 2),
             y: screenHeightMid - (ovalHeight / 2),
-            width: screenWidthMid,
-            height: screenHeightMid
+            width: ovalWidth,
+            height: ovalHeight
         )
 
         let normalizedOvalRect = CGRect(
