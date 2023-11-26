@@ -72,6 +72,8 @@ public struct FaceLivenessDetectorView: View {
             )
         )
 
+        let screenSize = UIScreen.main.bounds.size
+
         self._viewModel = StateObject(
             wrappedValue: .init(
                 faceDetector: faceDetector,
@@ -79,7 +81,8 @@ public struct FaceLivenessDetectorView: View {
                 captureSession: captureSession,
                 videoChunker: videoChunker,
                 closeButtonAction: { onCompletion(.failure(.userCancelled)) },
-                sessionID: sessionID
+                sessionID: sessionID,
+                screenSize: screenSize
             )
         )
     }
@@ -112,6 +115,7 @@ public struct FaceLivenessDetectorView: View {
             instructor: Instructor()
         )
 
+        let screenSize = UIScreen.main.bounds.size
         self._viewModel = StateObject(
             wrappedValue: .init(
                 faceDetector: captureSession.outputDelegate.faceDetector,
@@ -119,7 +123,8 @@ public struct FaceLivenessDetectorView: View {
                 captureSession: captureSession,
                 videoChunker: captureSession.outputDelegate.videoChunker,
                 closeButtonAction: { onCompletion(.failure(.userCancelled)) },
-                sessionID: sessionID
+                sessionID: sessionID,
+                screenSize: screenSize,
             )
         )
     }

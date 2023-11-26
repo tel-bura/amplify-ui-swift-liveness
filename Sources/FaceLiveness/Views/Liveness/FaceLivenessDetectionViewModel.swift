@@ -24,6 +24,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
     var closeButtonAction: () -> Void
     let videoChunker: VideoChunker
     let sessionID: String
+    let screenSize: CGSize
     var livenessService: LivenessService!
     let faceDetector: FaceDetector
     let faceInOvalMatching: FaceInOvalMatching
@@ -57,7 +58,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         videoChunker: VideoChunker,
         stateMachine: LivenessStateMachine = .init(state: .initial),
         closeButtonAction: @escaping () -> Void,
-        sessionID: String
+        sessionID: String,
+        screenSize: CGSize
     ) {
         self.closeButtonAction = closeButtonAction
         self.videoChunker = videoChunker
@@ -66,6 +68,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         self.captureSession = captureSession
         self.faceDetector = faceDetector
         self.faceInOvalMatching = faceInOvalMatching
+        self.screenSize = screenSize
 
         self.closeButtonAction = { [weak self] in
             guard let self else { return }
@@ -149,11 +152,18 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         else { return }
 
         let scaleRatio = cameraViewRect.width / videoSize.width
+
+        let screenWidthMid = self.screenSize.width / 2
+        let screenHeightMid = self.screenSize.height / 2
+
+        let ovalWidth = ovalParameters.boundingBox.width / 2
+        let ovalHeight = ovalParameters.boundingBox.height / 2
+
         let rect = CGRect(
-            x: 150,
-            y: 140,
-            width: ovalParameters.boundingBox.width / 2,
-            height: ovalParameters.boundingBox.height / 2
+            x: screenWidthMid - (ovalWidth / 2),
+            y: screenHeightMid - (ovalHeight / 2),
+            width: screenWidthMid,
+            height: screenHeightMid
         )
 
         let normalizedOvalRect = CGRect(
