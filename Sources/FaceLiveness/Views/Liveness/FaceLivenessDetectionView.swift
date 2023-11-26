@@ -124,7 +124,7 @@ public struct FaceLivenessDetectorView: View {
                 videoChunker: captureSession.outputDelegate.videoChunker,
                 closeButtonAction: { onCompletion(.failure(.userCancelled)) },
                 sessionID: sessionID,
-                screenSize: screenSize,
+                screenSize: screenSize
             )
         )
     }
