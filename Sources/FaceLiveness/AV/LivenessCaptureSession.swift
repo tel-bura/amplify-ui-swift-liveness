@@ -105,7 +105,7 @@ class LivenessCaptureSession {
         for captureSession: AVCaptureSession
     ) -> AVCaptureVideoPreviewLayer {
         let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.videoGravity = .resizeAspect
+        previewLayer.videoGravity = .resizeAspectFill
         previewLayer.connection?.videoOrientation = self.getOrientation()
         previewLayer.frame = frame
         return previewLayer

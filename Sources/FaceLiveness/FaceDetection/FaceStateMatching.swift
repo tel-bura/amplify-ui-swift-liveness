@@ -26,7 +26,7 @@ struct FaceInOvalMatching {
         }
 
         let intersection = intersectionOverUnion(boxA: face, boxB: oval)
-        print(String(format: "intersection %.7", intersection))
+        print("intersection \(intersection)")
         let thresholds = Thresholds(oval: oval, challengeConfig: challengeConfig)
 
         if storage.initialIOU == nil {
@@ -40,7 +40,7 @@ struct FaceInOvalMatching {
             initialIOU: initialIOU,
             thresholds: thresholds
         )
-        print(String(format: "faceMatchPercentage %.7", faceMatchPercentage))
+        print("faceMatchPercentage \(faceMatchPercentage)")
 
         let update: Instructor.Instruction
 
