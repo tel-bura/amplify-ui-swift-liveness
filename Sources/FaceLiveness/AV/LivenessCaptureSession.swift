@@ -112,17 +112,15 @@ class LivenessCaptureSession {
     }
     
     private func getOrientation() -> AVCaptureVideoOrientation {
-        print("getOrientation \(UIDevice.current.orientation)")
-        print("getOrientation \(UIApplication.shared.statusBarOrientation)")
       if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
         return AVCaptureVideoOrientation.landscapeRight
       } else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
         return AVCaptureVideoOrientation.landscapeLeft
       } else {
         if UIApplication.shared.statusBarOrientation == .landscapeLeft {
-          return AVCaptureVideoOrientation.landscapeRight
-        } else if UIApplication.shared.statusBarOrientation == .landscapeRight {
           return AVCaptureVideoOrientation.landscapeLeft
+        } else if UIApplication.shared.statusBarOrientation == .landscapeRight {
+          return AVCaptureVideoOrientation.landscapeRight
         } else {
           return AVCaptureVideoOrientation.portrait
         }
