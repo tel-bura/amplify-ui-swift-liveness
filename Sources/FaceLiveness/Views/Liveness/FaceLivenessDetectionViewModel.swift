@@ -151,7 +151,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
               let ovalParameters = sessionConfiguration?.ovalMatchChallenge.oval
         else { return }
 
-        let scaleRatio = 0.5
+        let scaleRatio = cameraViewRect.width / videoSize.width
 
         let screenWidthMid = self.screenSize.width / 2
         let screenHeightMid = self.screenSize.height / 2
@@ -164,6 +164,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         print("screenWidthMid \(screenWidthMid)")
         print("screenHeightMid \(screenHeightMid)")
 
+        print("scaleRatio \(scaleRatio)")
         print("screenHeightMid - (ovalHeightMid / 2) \(screenHeightMid - (ovalHeightMid / 2))")
         print("screenWidthMid - (ovalWidthMid / 2) \(screenWidthMid - (ovalWidthMid / 2))")
 
