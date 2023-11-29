@@ -18,6 +18,7 @@ class OvalView: UIView {
     }
 
     override func draw(_ rect: CGRect) {
+        print("OvalView draw minX: \(rect.minX) minY: \(rect.minY) midX: \(rect.midX) midY: \(rect.midY) maxX: \(rect.maxX) maxY: \(rect.maxY) width: \(rect.width) height: \(rect.height)")
         let mask = UIBezierPath(rect: bounds)
         let oval = UIBezierPath(ovalIn: ovalFrame)
         mask.append(oval.reversing())
