@@ -18,15 +18,15 @@ class StartSessionViewModel: ObservableObject {
 
     func setup() {
         Task { @MainActor in
-            presentationState = .loading
-            do {
-                let session = try await Amplify.Auth.fetchAuthSession()
-                presentationState = session.isSignedIn
-                ? .signedIn(action: signOut)
-                : .signedOut(action: signIn)
-            } catch {
-                print("Error fetching auth session", error)
-            }
+            presentationState = .signedIn(action: signOut)
+//            do {
+//                let session = try await Amplify.Auth.fetchAuthSession()
+//                presentationState = session.isSignedIn
+//                ? .signedIn(action: signOut)
+//                : .signedOut(action: signIn)
+//            } catch {
+//                print("Error fetching auth session", error)
+//            }
 
         }
     }
@@ -34,18 +34,10 @@ class StartSessionViewModel: ObservableObject {
     func createSession(_ completion: @escaping (String) -> Void) {
         Task { @MainActor in
             presentationState = .loading
-            let request = RESTRequest(
-                apiName: "liveness",
-                path: "/liveness/create"
-            )
 
             do {
-                let data = try await Amplify.API.post(request: request)
-                let response = try JSONDecoder().decode(
-                    CreateSessionResponse.self,
-                    from: data
-                )
-                completion(response.sessionId)
+                let data = try await createFaceLivenessSession(apiUrl: "https://1152-184-22-176-188.ngrok-free.app/graphql", kioskToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2YTA3ZDhlMy1iZmEyLTQxOTAtYWQxOC03MTk3MThlNmM4YWMiLCJpYXQiOjE3MDA0MTQxMDd9.qhMOhW0qYFwMhRC4ZFzrxM3ljsb-OC2C5zuONmwGUA0", userToken: nil)
+                completion(data.data!.createFaceLivenessSession.sessionId)
             } catch {
                 print("Error creating session", error)
             }
