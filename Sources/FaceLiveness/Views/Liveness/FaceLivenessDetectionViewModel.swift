@@ -168,8 +168,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         print("screenWidthMid - (ovalWidthMid / 2) \(screenWidthMid - (ovalWidthMid / 2))")
 
         let rect = CGRect(
-            x: screenHeightMid - (ovalHeightMid / 2), // 213.25
-            y: screenWidthMid - (ovalWidthMid / 2), // 406.5
+            x: 512, // 213.25
+            y: 384, // 406.5
             width: ovalWidthMid,
             height: ovalHeightMid
         )
