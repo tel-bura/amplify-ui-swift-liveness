@@ -168,8 +168,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         print("scaleRatio \(scaleRatio)")
 
         let rect = CGRect(
-            x: (screenHeightMid / 3),
-            y: (screenWidthMid / 3.5),
+            x: (screenHeightMid / 3) + self.positionX,
+            y: (screenWidthMid / 3.5) + self.positionY,
             width: ovalWidth,
             height: ovalHeight
         )
