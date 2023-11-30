@@ -25,6 +25,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
     let videoChunker: VideoChunker
     let sessionID: String
     let screenSize: CGSize
+    let positionX: Double
+    let positionY: Double
     var livenessService: LivenessService!
     let faceDetector: FaceDetector
     let faceInOvalMatching: FaceInOvalMatching

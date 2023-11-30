@@ -30,7 +30,9 @@ public struct FaceLivenessDetectorView: View {
         region: String,
         disableStartView: Bool = false,
         isPresented: Binding<Bool>,
-        onCompletion: @escaping (Result<Void, FaceLivenessDetectionError>) -> Void
+        onCompletion: @escaping (Result<Void, FaceLivenessDetectionError>) -> Void,
+        positionX: Double = 0.0,
+        positionY: Double = 0.0
     ) {
         self.disableStartView = disableStartView
         self._isPresented = isPresented
@@ -82,7 +84,9 @@ public struct FaceLivenessDetectorView: View {
                 videoChunker: videoChunker,
                 closeButtonAction: { onCompletion(.failure(.userCancelled)) },
                 sessionID: sessionID,
-                screenSize: screenSize
+                screenSize: screenSize,
+                positionX: positionX,
+                positionY: positionY
             )
         )
     }
