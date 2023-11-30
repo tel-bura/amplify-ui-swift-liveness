@@ -163,14 +163,11 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         print("ovalHeightMid \(ovalHeightMid)")
         print("screenWidthMid \(screenWidthMid)")
         print("screenHeightMid \(screenHeightMid)")
-
         print("scaleRatio \(scaleRatio)")
-        print("screenHeightMid - (ovalHeightMid / 2) \(screenHeightMid - (ovalHeightMid / 2))")
-        print("screenWidthMid - (ovalWidthMid / 2) \(screenWidthMid - (ovalWidthMid / 2))")
 
         let rect = CGRect(
-            x: screenWidthMid - (ovalParameters.boundingBox.width / 2) + 20.0,
-            y: screenWidthMid - (ovalParameters.boundingBox.width / 2),
+            x: (screenHeightMid / 3),
+            y: (screenWidthMid / 3.5),
             width: ovalParameters.boundingBox.width,
             height: ovalParameters.boundingBox.height
         )
@@ -183,8 +180,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         let normalizedOvalRect = CGRect(
             x: rect.minY * scaleRatio,
             y: rect.minX * scaleRatio,
-            width: rect.width * scaleRatio,
-            height: rect.height * scaleRatio
+            width: ovalWidthMid,
+            height: ovalHeightMid
         )
 
         livenessViewControllerDelegate?.drawOvalInCanvas(normalizedOvalRect)
