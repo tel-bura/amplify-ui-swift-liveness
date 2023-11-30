@@ -151,16 +151,16 @@ class FaceLivenessDetectionViewModel: ObservableObject {
               let ovalParameters = sessionConfiguration?.ovalMatchChallenge.oval
         else { return }
 
-        let scaleRatio = 1.0
+        let scaleRatio = cameraViewRect.width / videoSize.width
 
         let screenWidthMid = self.screenSize.width / 2
         let screenHeightMid = self.screenSize.height / 2
 
-        let ovalWidthMid = ovalParameters.boundingBox.width / 2
-        let ovalHeightMid = ovalParameters.boundingBox.height / 2
+        let ovalWidth = ovalParameters.boundingBox.width / 2
+        let ovalHeight = ovalParameters.boundingBox.height / 2
 
-        print("ovalWidthMid \(ovalWidthMid)")
-        print("ovalHeightMid \(ovalHeightMid)")
+        print("ovalWidth \(ovalWidth)")
+        print("ovalHeight \(ovalHeight)")
         print("screenWidthMid \(screenWidthMid)")
         print("screenHeightMid \(screenHeightMid)")
         print("scaleRatio \(scaleRatio)")
@@ -168,20 +168,15 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         let rect = CGRect(
             x: (screenHeightMid / 3),
             y: (screenWidthMid / 3.5),
-            width: ovalParameters.boundingBox.width,
-            height: ovalParameters.boundingBox.height
+            width: ovalWidth,
+            height: ovalHeight
         )
 
-        print("rect.minY \(rect.minY)")
-        print("rect.minX \(rect.minX)")
-        print("rect.width \(rect.width)")
-        print("rect.height \(rect.height)")
-
         let normalizedOvalRect = CGRect(
-            x: rect.minY * scaleRatio,
-            y: rect.minX * scaleRatio,
-            width: ovalWidthMid,
-            height: ovalHeightMid
+            x: rect.minX * scaleRatio,
+            y: rect.minY * scaleRatio,
+            width: rect.width * scaleRatio,
+            height: rect.height * scaleRatio
         )
 
         livenessViewControllerDelegate?.drawOvalInCanvas(normalizedOvalRect)
