@@ -61,7 +61,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         stateMachine: LivenessStateMachine = .init(state: .initial),
         closeButtonAction: @escaping () -> Void,
         sessionID: String,
-        screenSize: CGSize
+        positionX: Double,
+        positionY: Double
     ) {
         self.closeButtonAction = closeButtonAction
         self.videoChunker = videoChunker
@@ -71,6 +72,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         self.faceDetector = faceDetector
         self.faceInOvalMatching = faceInOvalMatching
         self.screenSize = screenSize
+        self.positionX = positionX
+        self.positionY = positionY
 
         self.closeButtonAction = { [weak self] in
             guard let self else { return }
