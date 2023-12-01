@@ -61,6 +61,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         stateMachine: LivenessStateMachine = .init(state: .initial),
         closeButtonAction: @escaping () -> Void,
         sessionID: String,
+        screenSize: CGSize,
         positionX: Double,
         positionY: Double
     ) {
