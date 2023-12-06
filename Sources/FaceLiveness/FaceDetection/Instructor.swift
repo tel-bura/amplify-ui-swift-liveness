@@ -54,7 +54,7 @@ class Instructor {
     func instruction(for update: Instruction) -> Instruction {
         if previousInstruction == update {
             runningCount += 1
-            if runningCount >= 15 {
+            if runningCount >= 3 {
                 return update
             }
             return .none
