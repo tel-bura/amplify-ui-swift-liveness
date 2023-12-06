@@ -55,16 +55,16 @@ struct FaceInOvalMatching {
     }
 
     private func isTooClose(face: CGRect, oval: CGRect, intersection: Double, thresholds: Thresholds) -> Bool {
-        oval.minY - face.minY > thresholds.faceDetectionHeight
-        || face.maxY - oval.maxY > thresholds.faceDetectionHeight
-        || (oval.minX - face.minX > thresholds.faceDetectionWidth && face.maxX - oval.maxX > thresholds.faceDetectionWidth)
+        oval.minY - face.minY > thresholds.faceDetectionWidth
+        || face.maxY - oval.maxY > thresholds.faceDetectionWidth
+        || (oval.minX - face.minX > thresholds.faceDetectionHeight && face.maxX - oval.maxX > thresholds.faceDetectionWidth)
     }
 
     private func isMatch(face: CGRect, oval: CGRect, intersection: Double, thresholds: Thresholds) -> Bool {
         intersection > thresholds.intersection
-        && abs(oval.minX - face.minX) < thresholds.ovalMatchWidth
-        && abs(oval.maxX - face.maxX) < thresholds.ovalMatchWidth
-        && abs(oval.maxY - face.maxY) < thresholds.ovalMatchHeight
+        && abs(oval.minX - face.minX) < thresholds.ovalMatchHeight
+        && abs(oval.maxX - face.maxX) < thresholds.ovalMatchHeight
+        && abs(oval.maxY - face.maxY) < thresholds.ovalMatchWidth
     }
 
     private func calculateFaceMatchPercentage(intersection: Double, initialIOU: Double, thresholds: Thresholds) -> Double {
