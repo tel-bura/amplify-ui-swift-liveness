@@ -11,6 +11,7 @@ import Amplify
 
 struct FaceInOvalMatching {
     let instructor: Instructor
+    let ovalThreshold: Double
     private let storage = Storage()
     class Storage {
         var initialIOU: Double?
@@ -45,7 +46,7 @@ struct FaceInOvalMatching {
 
         let intersection = intersectionOverUnion(boxA: face, boxB: oval)
         print("intersection \(intersection)")
-        let thresholds = Thresholds(oval: oval, challengeConfig: challengeConfig)
+        let thresholds = Thresholds(oval: oval, challengeConfig: challengeConfig, ovalThreshold: ovalThreshold)
         print("thresholds intersection \(thresholds.intersection)")
         print("thresholds ovalMatchWidth \(thresholds.ovalMatchWidth)")
         print("thresholds ovalMatchHeight \(thresholds.ovalMatchHeight)")
@@ -129,8 +130,8 @@ extension FaceInOvalMatching {
         let faceDetectionWidth: Double
         let faceDetectionHeight: Double
 
-        init(oval: CGRect, challengeConfig: FaceLivenessSession.OvalMatchChallenge) {
-            intersection = challengeConfig.oval.iouThreshold / 2.0
+        init(oval: CGRect, challengeConfig: FaceLivenessSession.OvalMatchChallenge, ovalThreshold: Double) {
+            intersection = challengeConfig.oval.iouThreshold / ovalThreshold
             ovalMatchWidth = oval.width * challengeConfig.oval.iouWidthThreshold
             ovalMatchHeight = oval.height * challengeConfig.oval.iouHeightThreshold
             faceDetectionWidth = oval.width * challengeConfig.face.iouWidthThreshold
