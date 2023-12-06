@@ -25,8 +25,32 @@ struct FaceInOvalMatching {
             return .none
         }
 
+        print("oval minX \(oval.minX)")
+        print("oval midX \(oval.midX)")
+        print("oval maxX \(oval.maxX)")
+        print("oval minY \(oval.minY)")
+        print("oval midY \(oval.midY)")
+        print("oval maxY \(oval.maxY)")
+        print("oval width \(oval.width)")
+        print("oval height \(oval.height)")
+
+        print("face minX \(face.minX)")
+        print("face midX \(face.midX)")
+        print("face maxX \(face.maxX)")
+        print("face minY \(face.minY)")
+        print("face midY \(face.midY)")
+        print("face maxY \(face.maxY)")
+        print("face width \(face.width)")
+        print("face height \(face.height)")
+
         let intersection = intersectionOverUnion(boxA: face, boxB: oval)
+        print("intersection \(intersection)")
         let thresholds = Thresholds(oval: oval, challengeConfig: challengeConfig)
+        print("thresholds intersection \(thresholds.intersection)")
+        print("thresholds ovalMatchWidth \(thresholds.ovalMatchWidth)")
+        print("thresholds ovalMatchHeight \(thresholds.ovalMatchHeight)")
+        print("thresholds faceDetectionWidth \(thresholds.faceDetectionWidth)")
+        print("thresholds faceDetectionHeight \(thresholds.faceDetectionHeight)")
 
         if storage.initialIOU == nil {
             storage.initialIOU = intersection
@@ -34,11 +58,14 @@ struct FaceInOvalMatching {
 
         let initialIOU = storage.initialIOU!
 
+        print("initialIOU \(initialIOU)")
+
         let faceMatchPercentage = calculateFaceMatchPercentage(
             intersection: intersection,
             initialIOU: initialIOU,
             thresholds: thresholds
         )
+        print("faceMatchPercentage \(faceMatchPercentage)")
 
         let update: Instructor.Instruction
 
@@ -55,16 +82,16 @@ struct FaceInOvalMatching {
     }
 
     private func isTooClose(face: CGRect, oval: CGRect, intersection: Double, thresholds: Thresholds) -> Bool {
-        oval.minY - face.minY > thresholds.faceDetectionWidth
-        || face.maxY - oval.maxY > thresholds.faceDetectionWidth
-        || (oval.minX - face.minX > thresholds.faceDetectionHeight && face.maxX - oval.maxX > thresholds.faceDetectionWidth)
+        oval.minY - face.minY > thresholds.faceDetectionHeight
+        || face.maxY - oval.maxY > thresholds.faceDetectionHeight
+        || (oval.minX - face.minX > thresholds.faceDetectionWidth && face.maxX - oval.maxX > thresholds.faceDetectionWidth)
     }
 
     private func isMatch(face: CGRect, oval: CGRect, intersection: Double, thresholds: Thresholds) -> Bool {
         intersection > thresholds.intersection
-        && abs(oval.minX - face.minX) < thresholds.ovalMatchHeight
-        && abs(oval.maxX - face.maxX) < thresholds.ovalMatchHeight
-        && abs(oval.maxY - face.maxY) < thresholds.ovalMatchWidth
+        && abs(oval.minX - face.minX) < thresholds.ovalMatchWidth
+        && abs(oval.maxX - face.maxX) < thresholds.ovalMatchWidth
+        && abs(oval.maxY - face.maxY) < thresholds.ovalMatchHeight
     }
 
     private func calculateFaceMatchPercentage(intersection: Double, initialIOU: Double, thresholds: Thresholds) -> Double {
