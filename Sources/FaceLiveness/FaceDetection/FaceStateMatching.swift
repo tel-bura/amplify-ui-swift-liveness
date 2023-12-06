@@ -70,6 +70,7 @@ struct FaceInOvalMatching {
         let update: Instructor.Instruction
 
         if isMatch(face: face, oval: oval, intersection: intersection, thresholds: thresholds) {
+            print("update to match")
             update = .match
         } else if isTooClose(face: face, oval: oval, intersection: intersection, thresholds: thresholds) {
             update = .tooClose(nearnessPercentage: faceMatchPercentage)

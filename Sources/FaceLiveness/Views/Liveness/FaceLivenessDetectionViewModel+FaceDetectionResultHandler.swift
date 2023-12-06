@@ -109,6 +109,7 @@ extension FaceLivenessDetectionViewModel: FaceDetectionResultHandler {
         DispatchQueue.main.async {
             switch instruction {
             case .match:
+                print("handleInstruction update to match")
                 self.livenessState.faceMatched()
                 self.faceMatchedTimestamp = Date().timestampMilliseconds
                 self.livenessViewControllerDelegate?.displayFreshness(colorSequences: colorSequences)
