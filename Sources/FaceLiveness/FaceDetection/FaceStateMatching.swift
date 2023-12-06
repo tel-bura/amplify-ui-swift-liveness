@@ -25,15 +25,39 @@ struct FaceInOvalMatching {
             return .none
         }
 
+        print("oval minX \(oval.minX)")
+        print("oval midX \(oval.midX)")
+        print("oval maxX \(oval.maxX)")
+        print("oval minY \(oval.minY)")
+        print("oval midY \(oval.midY)")
+        print("oval maxY \(oval.maxY)")
+        print("oval width \(oval.width)")
+        print("oval height \(oval.height)")
+
+        print("face minX \(face.minX)")
+        print("face midX \(face.midX)")
+        print("face maxX \(face.maxX)")
+        print("face minY \(face.minY)")
+        print("face midY \(face.midY)")
+        print("face maxY \(face.maxY)")
+        print("face width \(face.width)")
+        print("face height \(face.height)")
+
         let intersection = intersectionOverUnion(boxA: face, boxB: oval)
         print("intersection \(intersection)")
         let thresholds = Thresholds(oval: oval, challengeConfig: challengeConfig)
+        print("thresholds ovalMatchWidth \(thresholds.ovalMatchWidth)")
+        print("thresholds ovalMatchHeight \(thresholds.ovalMatchHeight)")
+        print("thresholds faceDetectionWidth \(thresholds.faceDetectionWidth)")
+        print("thresholds faceDetectionHeight \(thresholds.faceDetectionHeight)")
 
         if storage.initialIOU == nil {
             storage.initialIOU = intersection
         }
 
         let initialIOU = storage.initialIOU!
+
+        print("initialIOU \(initialIOU)")
 
         let faceMatchPercentage = calculateFaceMatchPercentage(
             intersection: intersection,
