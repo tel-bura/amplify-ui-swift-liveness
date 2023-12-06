@@ -88,15 +88,14 @@ struct FaceInOvalMatching {
     }
 
     private func isMatch(face: CGRect, oval: CGRect, intersection: Double, thresholds: Thresholds) -> Bool {
-        intersection > thresholds.intersection
+        let isMatchResult = intersection > thresholds.intersection
         && abs(oval.minX - face.minX) < thresholds.ovalMatchWidth
         && abs(oval.maxX - face.maxX) < thresholds.ovalMatchWidth
         && abs(oval.maxY - face.maxY) < thresholds.ovalMatchHeight
-        
-        print("isMatch \(intersection > thresholds.intersection
-        && abs(oval.minX - face.minX) < thresholds.ovalMatchWidth
-        && abs(oval.maxX - face.maxX) < thresholds.ovalMatchWidth
-        && abs(oval.maxY - face.maxY) < thresholds.ovalMatchHeight)")
+
+        print("isMatchResult \(isMatchResult)")
+
+        return isMatchResult
     }
 
     private func calculateFaceMatchPercentage(intersection: Double, initialIOU: Double, thresholds: Thresholds) -> Double {
