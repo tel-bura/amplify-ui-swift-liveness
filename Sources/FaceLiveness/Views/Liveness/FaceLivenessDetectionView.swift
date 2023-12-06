@@ -51,7 +51,7 @@ public struct FaceLivenessDetectorView: View {
         let faceDetector = try! FaceDetectorShortRange.Model()
         let faceInOvalStateMatching = FaceInOvalMatching(
             instructor: Instructor(),
-            ovalThreshold: ovalThreshold
+            ovalThreshold: ovalThreshold ?? 2.0
         )
 
         let videoChunker = VideoChunker(
@@ -113,7 +113,7 @@ public struct FaceLivenessDetectorView: View {
 
         let faceInOvalStateMatching = FaceInOvalMatching(
             instructor: Instructor(),
-            ovalThreshold: ovalThreshold
+            ovalThreshold: ovalThreshold ?? 2.0
         )
 
         self._viewModel = StateObject(
