@@ -107,7 +107,10 @@ class LivenessCaptureSession {
         let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.videoGravity = .resizeAspectFill
         previewLayer.connection?.videoOrientation = .portrait
-        previewLayer.transform = CATransform3DMakeRotation(-3 * .pi / 2, 0, 0, 1)
+        previewLayer.transform = CATransform3DConcat(
+            CATransform3DMakeRotation(.pi / 2, 0, 0, 1), // Rotate 90 degrees
+            CATransform3DMakeScale(1, -1, 1) // Flip vertically
+        )
         previewLayer.frame = frame
         return previewLayer
     }
