@@ -66,7 +66,7 @@ final class _LivenessViewController: UIViewController {
         let y = view.frame.minY
         let width = view.frame.width
         let height = width / 3 * 4
-        let cameraFrame = CGRect(x: x, y: y, width: width, height: height)
+        let cameraFrame = CGRect(x: y, y: x, width: height, height: width)
 
         guard let avLayer = viewModel.startCamera(withinFrame: cameraFrame) else {
             DispatchQueue.main.async {
