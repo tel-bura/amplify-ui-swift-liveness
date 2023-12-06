@@ -125,7 +125,7 @@ extension FaceInOvalMatching {
         let faceDetectionHeight: Double
 
         init(oval: CGRect, challengeConfig: FaceLivenessSession.OvalMatchChallenge) {
-            intersection = challengeConfig.oval.iouThreshold
+            intersection = challengeConfig.oval.iouThreshold / 1.50
             ovalMatchWidth = oval.width * challengeConfig.oval.iouWidthThreshold
             ovalMatchHeight = oval.height * challengeConfig.oval.iouHeightThreshold
             faceDetectionWidth = oval.width * challengeConfig.face.iouWidthThreshold
