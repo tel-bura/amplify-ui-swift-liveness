@@ -105,8 +105,8 @@ final class _LivenessViewController: UIViewController {
 
 extension UIImage {
     func rotate() -> UIImage? {
-        let degrees: CGFloat = 180.0
-        switch image.imageOrientation {
+        var degrees: CGFloat = 180.0
+        switch self.imageOrientation {
             case .down, .downMirrored:
                 degrees = 180.0
             case .left, .leftMirrored:
