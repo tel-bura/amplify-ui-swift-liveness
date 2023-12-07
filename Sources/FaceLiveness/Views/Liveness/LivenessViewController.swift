@@ -143,6 +143,7 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
                 // display image
                 let imageView = CroppedImageView(image: newImage!)
                 imageView.frame = self.previewLayer.frame
+                imageView.clipsToBounds = true
                 self.view.addSubview(imageView)
                 self.previewLayer.removeFromSuperlayer()
                 self.viewModel.stopRecording()
