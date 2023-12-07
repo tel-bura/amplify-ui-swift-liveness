@@ -9,7 +9,7 @@ import Foundation
 
 class Instructor {
     init(
-        maxRunningCount: Int = 3,
+        maxRunningCount: Int = 2,
         previousInstruction: Instructor.Instruction? = nil,
         runningCount: Int = 0
     ) {
@@ -52,7 +52,7 @@ class Instructor {
 
     var previousInstruction: Instruction?
     var runningCount = 0
-    var maxRunningCount = 3
+    var maxRunningCount = 2
 
     func instruction(for update: Instruction) -> Instruction {
         if previousInstruction == update {

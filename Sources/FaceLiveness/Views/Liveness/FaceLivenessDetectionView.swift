@@ -32,7 +32,7 @@ public struct FaceLivenessDetectorView: View {
         isPresented: Binding<Bool>,
         onCompletion: @escaping (Result<Void, FaceLivenessDetectionError>) -> Void,
         ovalThreshold: Double? = 2.0,
-        maxRunningCount: Int? = 3
+        maxRunningCount: Int? = 2
     ) {
         self.disableStartView = disableStartView
         self._isPresented = isPresented
@@ -51,7 +51,7 @@ public struct FaceLivenessDetectorView: View {
 
         let faceDetector = try! FaceDetectorShortRange.Model()
         let faceInOvalStateMatching = FaceInOvalMatching(
-            instructor: Instructor(maxRunningCount: maxRunningCount ?? 3),
+            instructor: Instructor(maxRunningCount: maxRunningCount ?? 2),
             ovalThreshold: ovalThreshold ?? 2.0
         )
 
@@ -96,7 +96,7 @@ public struct FaceLivenessDetectorView: View {
         onCompletion: @escaping (Result<Void, FaceLivenessDetectionError>) -> Void,
         captureSession: LivenessCaptureSession,
         ovalThreshold: Double? = 2.0,
-        maxRunningCount: Int? = 3
+        maxRunningCount: Int? = 2
     ) {
         self.disableStartView = disableStartView
         self._isPresented = isPresented
@@ -114,7 +114,7 @@ public struct FaceLivenessDetectorView: View {
         }
 
         let faceInOvalStateMatching = FaceInOvalMatching(
-            instructor: Instructor(maxRunningCount: maxRunningCount ?? 3),
+            instructor: Instructor(maxRunningCount: maxRunningCount ?? 2),
             ovalThreshold: ovalThreshold ?? 2.0
         )
 
