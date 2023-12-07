@@ -107,34 +107,44 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
     func displaySingleFrame(uiImage: UIImage) {
         DispatchQueue.main.async {
             // rotate image to correct orientation
-            var degrees: CGFloat = 180.0
-            switch uiImage.imageOrientation {
-                case .down, .downMirrored:
-                    degrees = 180.0
-                case .left, .leftMirrored:
-                    degrees = 90.0
-                case .right, .rightMirrored:
-                    degrees = 270.0
-                default:
-                    break
+            var radians: CGFloat? = nil
+            if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
+                radians = .pi/2
+            } else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
+                radians = .pi + .pi/2
+            } else {
+                if UIApplication.shared.statusBarOrientation == .landscapeLeft {
+                    radians = .pi/2
+                } else if UIApplication.shared.statusBarOrientation == .landscapeRight {
+                    radians = .pi + .pi/2
+                } else {
+                    radians = nil
+                }
             }
-            let radians = CGFloat(degrees * .pi / 180)
-            let transform = CGAffineTransform(rotationAngle: radians)
-            let size = uiImage.size.applying(transform)
-            UIGraphicsBeginImageContextWithOptions(size, false, uiImage.scale)
-            if let context = UIGraphicsGetCurrentContext() {
-                context.concatenate(transform)
-                context.draw(uiImage.cgImage!, in: CGRect(origin: .zero, size: size))
-                let newImage = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
+            var newSize = CGRect(origin: CGPoint.zero, size: uiImage.size).applying(CGAffineTransform(rotationAngle: CGFloat(radians))).size
+            // Trim off the extremely small float value to prevent core graphics from rounding it up
+            newSize.width = floor(newSize.width)
+            newSize.height = floor(newSize.height)
 
-                // display image
-                let imageView = UIImageView(image: newImage!)
-                imageView.frame = self.previewLayer.frame
-                self.view.addSubview(imageView)
-                self.previewLayer.removeFromSuperlayer()
-                self.viewModel.stopRecording()
-            }
+            UIGraphicsBeginImageContextWithOptions(newSize, false, uiImage.scale)
+            let context = UIGraphicsGetCurrentContext()!
+
+            // Move origin to middle
+            context.translateBy(x: newSize.width/2, y: newSize.height/2)
+            // Rotate around middle
+            context.rotate(by: CGFloat(radians))
+            // Draw the image at its center
+            uiImage.draw(in: CGRect(x: -uiImage.size.width/2, y: -uiImage.size.height/2, width: uiImage.size.width, height: uiImage.size.height))
+
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            
+            // display image
+            let imageView = UIImageView(image: newImage!)
+            imageView.frame = self.previewLayer.frame
+            self.view.addSubview(imageView)
+            self.previewLayer.removeFromSuperlayer()
+            self.viewModel.stopRecording()
         }
     }
 
