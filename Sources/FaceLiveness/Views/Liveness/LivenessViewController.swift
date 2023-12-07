@@ -140,20 +140,18 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
                 let newImage = UIGraphicsGetImageFromCurrentImageContext()
                 UIGraphicsEndImageContext()
 
+                // crop image
+                let shorterSide = min(newImage.size.width, newImage.size.height)
+                let cropRect = CGRect(x: (newImage.size.width - shorterSide) / 2,
+                                        y: (newImage.size.height - shorterSide) / 2,
+                                        width: shorterSide,
+                                        height: shorterSide)
+                let croppedCGImage = newImage.cgImage!.cropping(to: cropRect)
+                let newCroppedImage = UIImage(cgImage: croppedCGImage!, scale: newImage.scale, orientation: newImage.imageOrientation)
+
                 // display image
-                let imageView = UIImageView(image: newImage!)
+                let imageView = UIImageView(image: newCroppedImage!)
                 imageView.frame = self.previewLayer.frame
-                if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
-                    imageView.frame.size = CGSize(width: self.previewLayer.frame.size.height, height: self.previewLayer.frame.size.height)
-                } else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
-                    imageView.frame.size = CGSize(width: self.previewLayer.frame.size.height, height: self.previewLayer.frame.size.height)
-                } else {
-                    if UIApplication.shared.statusBarOrientation == .landscapeLeft {
-                        imageView.frame.size = CGSize(width: self.previewLayer.frame.size.height, height: self.previewLayer.frame.size.height)
-                    } else if UIApplication.shared.statusBarOrientation == .landscapeRight {
-                        imageView.frame.size = CGSize(width: self.previewLayer.frame.size.height, height: self.previewLayer.frame.size.height)
-                    }
-                }
                 self.view.addSubview(imageView)
                 self.previewLayer.removeFromSuperlayer()
                 self.viewModel.stopRecording()
