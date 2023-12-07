@@ -142,6 +142,7 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
 
                 // display image
                 let imageView = UIImageView(image: newImage!)
+                imageView.frame = self.previewLayer.frame
                 if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
                     imageView.frame.size = CGSize(width: self.previewLayer.frame.size.height, height: self.previewLayer.frame.size.height)
                 } else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
@@ -153,7 +154,6 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
                         imageView.frame.size = CGSize(width: self.previewLayer.frame.size.height, height: self.previewLayer.frame.size.height)
                     }
                 }
-                imageView.frame = self.previewLayer.frame
                 self.view.addSubview(imageView)
                 self.previewLayer.removeFromSuperlayer()
                 self.viewModel.stopRecording()
