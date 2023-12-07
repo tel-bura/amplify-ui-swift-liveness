@@ -141,13 +141,13 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
                 UIGraphicsEndImageContext()
 
                 // crop image
-                let shorterSide = min(newImage.size.width, newImage.size.height)
-                let cropRect = CGRect(x: (newImage.size.width - shorterSide) / 2,
-                                        y: (newImage.size.height - shorterSide) / 2,
+                let shorterSide = min(newImage!.size.width, newImage!.size.height)
+                let cropRect = CGRect(x: (newImage!.size.width - shorterSide) / 2,
+                                        y: (newImage!.size.height - shorterSide) / 2,
                                         width: shorterSide,
                                         height: shorterSide)
-                let croppedCGImage = newImage.cgImage!.cropping(to: cropRect)
-                let newCroppedImage = UIImage(cgImage: croppedCGImage!, scale: newImage.scale, orientation: newImage.imageOrientation)
+                let croppedCGImage = newImage!.cgImage!.cropping(to: cropRect)
+                let newCroppedImage = UIImage(cgImage: croppedCGImage!, scale: newImage!.scale, orientation: newImage!.imageOrientation)
 
                 // display image
                 let imageView = UIImageView(image: newCroppedImage!)
