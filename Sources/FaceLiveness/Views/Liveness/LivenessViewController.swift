@@ -142,6 +142,17 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
 
                 // display image
                 let imageView = UIImageView(image: newImage!)
+                if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
+                    imageView.frame.size = CGSize(width: self.previewLayer.frame.size.height, height: self.previewLayer.frame.size.height)
+                } else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
+                    imageView.frame.size = CGSize(width: self.previewLayer.frame.size.height, height: self.previewLayer.frame.size.height)
+                } else {
+                    if UIApplication.shared.statusBarOrientation == .landscapeLeft {
+                        imageView.frame.size = CGSize(width: self.previewLayer.frame.size.height, height: self.previewLayer.frame.size.height)
+                    } else if UIApplication.shared.statusBarOrientation == .landscapeRight {
+                        imageView.frame.size = CGSize(width: self.previewLayer.frame.size.height, height: self.previewLayer.frame.size.height)
+                    }
+                }
                 imageView.frame = self.previewLayer.frame
                 self.view.addSubview(imageView)
                 self.previewLayer.removeFromSuperlayer()
