@@ -109,9 +109,9 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
             // rotate image to correct orientation
             var radians: CGFloat? = nil
             if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
-                radians = .pi/2
-            } else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
                 radians = .pi + .pi/2
+            } else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
+                radians = .pi/2
             } else {
                 if UIApplication.shared.statusBarOrientation == .landscapeLeft {
                     radians = .pi/2
