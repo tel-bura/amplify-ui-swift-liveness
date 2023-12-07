@@ -103,10 +103,39 @@ final class _LivenessViewController: UIViewController {
     required init?(coder: NSCoder) { fatalError() }
 }
 
+extension UIImage {
+    func rotate() -> UIImage? {
+        let degrees: CGFloat = 180.0
+        switch image.imageOrientation {
+            case .down, .downMirrored:
+                degrees = 180.0
+            case .left, .leftMirrored:
+                degrees = 90.0
+            case .right, .rightMirrored:
+                degrees = 270.0
+            default:
+                break
+        }
+        let radians = CGFloat(degrees * .pi / 180)
+        let transform = CGAffineTransform(rotationAngle: radians)
+        let size = self.size.applying(transform)
+        UIGraphicsBeginImageContextWithOptions(size, false, self.scale)
+        if let context = UIGraphicsGetCurrentContext() {
+            context.concatenate(transform)
+            context.draw(self.cgImage!, in: CGRect(origin: .zero, size: size))
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            return newImage
+        }
+        return nil
+    }
+}
+
 extension _LivenessViewController: FaceLivenessViewControllerPresenter {
     func displaySingleFrame(uiImage: UIImage) {
         DispatchQueue.main.async {
-            let imageView = UIImageView(image: uiImage)
+            // this part should be fix to display image in the correct orientation
+            let imageView = UIImageView(image: uiImage.rotate()!)
             imageView.frame = self.previewLayer.frame
             self.view.addSubview(imageView)
             self.previewLayer.removeFromSuperlayer()
