@@ -150,7 +150,7 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
                 let newCroppedImage = UIImage(cgImage: croppedCGImage!, scale: newImage!.scale, orientation: newImage!.imageOrientation)
 
                 // display image
-                let imageView = UIImageView(image: newCroppedImage!)
+                let imageView = UIImageView(image: newCroppedImage)
                 imageView.frame = self.previewLayer.frame
                 self.view.addSubview(imageView)
                 self.previewLayer.removeFromSuperlayer()
