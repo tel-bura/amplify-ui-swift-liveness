@@ -13,7 +13,7 @@ class CroppedImageView: UIImageView {
     
     contentMode = .scaleAspectFill
     layer.contentsRect = CGRect(x: 0, y: 0, width: 1.0, height: 1.0)
-    layer.affineTransform = CGAffineTransform(scaleX: scale, y: scale)
+    layer.setAffineTransform(CGAffineTransform(scaleX: scale, y: scale))
     layer.position = CGPoint(x: frame.width / 2, y: frame.height / 2)
   }
 }
