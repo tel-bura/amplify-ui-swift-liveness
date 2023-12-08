@@ -12,7 +12,7 @@ import Amplify
 struct FaceInOvalMatching {
     let instructor: Instructor
     let ovalThreshold: Double
-    let onLog: ((message: String) -> Void)?
+    let onLog: ((_ message: String) -> Void)?
     private let storage = Storage()
     class Storage {
         var initialIOU: Double?
