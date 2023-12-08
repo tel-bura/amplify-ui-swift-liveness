@@ -12,6 +12,7 @@ import Amplify
 struct FaceInOvalMatching {
     let instructor: Instructor
     let ovalThreshold: Double
+    let onLog: ((message: String) -> Void)?
     private let storage = Storage()
     class Storage {
         var initialIOU: Double?
@@ -26,32 +27,8 @@ struct FaceInOvalMatching {
             return .none
         }
 
-        print("oval minX \(oval.minX)")
-        print("oval midX \(oval.midX)")
-        print("oval maxX \(oval.maxX)")
-        print("oval minY \(oval.minY)")
-        print("oval midY \(oval.midY)")
-        print("oval maxY \(oval.maxY)")
-        print("oval width \(oval.width)")
-        print("oval height \(oval.height)")
-
-        print("face minX \(face.minX)")
-        print("face midX \(face.midX)")
-        print("face maxX \(face.maxX)")
-        print("face minY \(face.minY)")
-        print("face midY \(face.midY)")
-        print("face maxY \(face.maxY)")
-        print("face width \(face.width)")
-        print("face height \(face.height)")
-
         let intersection = intersectionOverUnion(boxA: face, boxB: oval)
-        print("intersection \(intersection)")
         let thresholds = Thresholds(oval: oval, challengeConfig: challengeConfig, ovalThreshold: ovalThreshold)
-        print("thresholds intersection \(thresholds.intersection)")
-        print("thresholds ovalMatchWidth \(thresholds.ovalMatchWidth)")
-        print("thresholds ovalMatchHeight \(thresholds.ovalMatchHeight)")
-        print("thresholds faceDetectionWidth \(thresholds.faceDetectionWidth)")
-        print("thresholds faceDetectionHeight \(thresholds.faceDetectionHeight)")
 
         if storage.initialIOU == nil {
             storage.initialIOU = intersection
@@ -59,19 +36,44 @@ struct FaceInOvalMatching {
 
         let initialIOU = storage.initialIOU!
 
-        print("initialIOU \(initialIOU)")
-
         let faceMatchPercentage = calculateFaceMatchPercentage(
             intersection: intersection,
             initialIOU: initialIOU,
             thresholds: thresholds
         )
-        print("faceMatchPercentage \(faceMatchPercentage)")
 
         let update: Instructor.Instruction
 
         if isMatch(face: face, oval: oval, intersection: intersection, thresholds: thresholds) {
             print("update to match")
+            let message = """
+                oval minX \(oval.minX)
+                oval midX \(oval.midX)
+                oval maxX \(oval.maxX)
+                oval minY \(oval.minY)
+                oval midY \(oval.midY)
+                oval maxY \(oval.maxY)
+                oval width \(oval.width)
+                oval height \(oval.height)
+                face minX \(face.minX)
+                face midX \(face.midX)
+                face maxX \(face.maxX)
+                face minY \(face.minY)
+                face midY \(face.midY)
+                face maxY \(face.maxY)
+                face width \(face.width)
+                face height \(face.height)
+                intersection \(intersection)
+                thresholds intersection \(thresholds.intersection)
+                thresholds ovalMatchWidth \(thresholds.ovalMatchWidth)
+                thresholds ovalMatchHeight \(thresholds.ovalMatchHeight)
+                thresholds faceDetectionWidth \(thresholds.faceDetectionWidth)
+                thresholds faceDetectionHeight \(thresholds.faceDetectionHeight)
+                initialIOU \(initialIOU)
+                faceMatchPercentage \(faceMatchPercentage)
+            """
+            print(message)
+            onLog?(message)
             update = .match
         } else if isTooClose(face: face, oval: oval, intersection: intersection, thresholds: thresholds) {
             update = .tooClose(nearnessPercentage: faceMatchPercentage)

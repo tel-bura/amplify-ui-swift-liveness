@@ -32,7 +32,8 @@ public struct FaceLivenessDetectorView: View {
         isPresented: Binding<Bool>,
         onCompletion: @escaping (Result<Void, FaceLivenessDetectionError>) -> Void,
         ovalThreshold: Double? = 2.0,
-        maxRunningCount: Int? = 2
+        maxRunningCount: Int? = 2,
+        onLog: (@escaping (message: String) -> Void)?,
     ) {
         self.disableStartView = disableStartView
         self._isPresented = isPresented
@@ -52,7 +53,8 @@ public struct FaceLivenessDetectorView: View {
         let faceDetector = try! FaceDetectorShortRange.Model()
         let faceInOvalStateMatching = FaceInOvalMatching(
             instructor: Instructor(maxRunningCount: maxRunningCount ?? 2),
-            ovalThreshold: ovalThreshold ?? 2.0
+            ovalThreshold: ovalThreshold ?? 2.0,
+            onLog: onLog
         )
 
         let videoChunker = VideoChunker(
@@ -96,7 +98,8 @@ public struct FaceLivenessDetectorView: View {
         onCompletion: @escaping (Result<Void, FaceLivenessDetectionError>) -> Void,
         captureSession: LivenessCaptureSession,
         ovalThreshold: Double? = 2.0,
-        maxRunningCount: Int? = 2
+        maxRunningCount: Int? = 2,
+        onLog: (@escaping (message: String) -> Void)?,
     ) {
         self.disableStartView = disableStartView
         self._isPresented = isPresented
@@ -115,7 +118,8 @@ public struct FaceLivenessDetectorView: View {
 
         let faceInOvalStateMatching = FaceInOvalMatching(
             instructor: Instructor(maxRunningCount: maxRunningCount ?? 2),
-            ovalThreshold: ovalThreshold ?? 2.0
+            ovalThreshold: ovalThreshold ?? 2.0,
+            onLog: onLog
         )
 
         self._viewModel = StateObject(
