@@ -33,7 +33,7 @@ public struct FaceLivenessDetectorView: View {
         onCompletion: @escaping (Result<Void, FaceLivenessDetectionError>) -> Void,
         ovalThreshold: Double? = 2.0,
         maxRunningCount: Int? = 2,
-        onLog: ((_ message: String) -> Void)?
+        onLog: ((_ message: String) -> Void)? = nil
     ) {
         self.disableStartView = disableStartView
         self._isPresented = isPresented
@@ -99,7 +99,7 @@ public struct FaceLivenessDetectorView: View {
         captureSession: LivenessCaptureSession,
         ovalThreshold: Double? = 2.0,
         maxRunningCount: Int? = 2,
-        onLog: ((_ message: String) -> Void)?
+        onLog: ((_ message: String) -> Void)? = nil
     ) {
         self.disableStartView = disableStartView
         self._isPresented = isPresented
