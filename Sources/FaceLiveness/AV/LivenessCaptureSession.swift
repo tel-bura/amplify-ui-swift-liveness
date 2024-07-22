@@ -23,15 +23,6 @@ class LivenessCaptureSession {
         guard let camera = captureDevice.avCaptureDevice
         else { throw LivenessCaptureSessionError.cameraUnavailable }
 
-        do {
-            try camera.lockForConfiguration()
-            let zoomFactor:CGFloat = 1.0
-            camera.videoZoomFactor = zoomFactor
-            camera.unlockForConfiguration()
-        } catch {
-            //Catch error from lockForConfiguration
-        }
-
         let cameraInput = try AVCaptureDeviceInput(device: camera)
 
         teardownExistingSession(input: cameraInput)
@@ -99,7 +90,7 @@ class LivenessCaptureSession {
         output.connections
             .filter(\.isVideoOrientationSupported)
             .forEach {
-                $0.videoOrientation = self.getOrientation()
+                $0.videoOrientation = .portrait
         }
 
         if captureSession.canAddOutput(output) {
@@ -114,7 +105,7 @@ class LivenessCaptureSession {
         for captureSession: AVCaptureSession
     ) -> AVCaptureVideoPreviewLayer {
         let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.videoGravity = .resizeAspect
+        previewLayer.videoGravity = .resizeAspectFill
         previewLayer.connection?.videoOrientation = self.getOrientation()
         previewLayer.frame = frame
         return previewLayer
