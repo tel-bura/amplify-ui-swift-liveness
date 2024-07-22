@@ -106,11 +106,55 @@ final class _LivenessViewController: UIViewController {
 extension _LivenessViewController: FaceLivenessViewControllerPresenter {
     func displaySingleFrame(uiImage: UIImage) {
         DispatchQueue.main.async {
-            let imageView = UIImageView(image: uiImage)
-            imageView.frame = self.previewLayer.frame
-            self.view.addSubview(imageView)
-            self.previewLayer.removeFromSuperlayer()
-            self.viewModel.stopRecording()
+            // rotate image to correct orientation
+            var radians: CGFloat? = nil
+            if UIDevice.current.orientation == UIDeviceOrientation.landscapeLeft {
+                radians = .pi + .pi/2
+            } else if UIDevice.current.orientation == UIDeviceOrientation.landscapeRight {
+                radians = .pi/2
+            } else {
+                if UIApplication.shared.statusBarOrientation == .landscapeLeft {
+                    radians = .pi/2
+                } else if UIApplication.shared.statusBarOrientation == .landscapeRight {
+                    radians = .pi + .pi/2
+                } else {
+                    radians = nil
+                }
+            }
+            if (radians != nil) {
+                var newSize = CGRect(origin: CGPoint.zero, size: uiImage.size).applying(CGAffineTransform(rotationAngle: CGFloat(radians!))).size
+                // Trim off the extremely small float value to prevent core graphics from rounding it up
+                newSize.width = floor(newSize.width)
+                newSize.height = floor(newSize.height)
+
+                UIGraphicsBeginImageContextWithOptions(newSize, false, uiImage.scale)
+                let context = UIGraphicsGetCurrentContext()!
+
+                // Move origin to middle
+                context.translateBy(x: newSize.width/2, y: newSize.height/2)
+                // Rotate around middle
+                context.rotate(by: CGFloat(radians!))
+                // Draw the image at its center
+                uiImage.draw(in: CGRect(x: -uiImage.size.width/2, y: -uiImage.size.height/2, width: uiImage.size.width, height: uiImage.size.height))
+
+                let newImage = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+
+                // display image
+                let imageView = CroppedImageView(image: newImage!)
+                imageView.frame = self.previewLayer.frame
+                imageView.clipsToBounds = true
+                self.view.addSubview(imageView)
+                self.previewLayer.removeFromSuperlayer()
+                self.viewModel.stopRecording()
+            } else {
+                // display image
+                let imageView = UIImageView(image: uiImage)
+                imageView.frame = self.previewLayer.frame
+                self.view.addSubview(imageView)
+                self.previewLayer.removeFromSuperlayer()
+                self.viewModel.stopRecording()
+            }
         }
     }
 

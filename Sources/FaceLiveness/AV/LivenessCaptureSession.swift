@@ -127,9 +127,9 @@ class LivenessCaptureSession {
         return AVCaptureVideoOrientation.landscapeLeft
       } else {
         if UIApplication.shared.statusBarOrientation == .landscapeLeft {
-          return AVCaptureVideoOrientation.landscapeRight
-        } else if UIApplication.shared.statusBarOrientation == .landscapeRight {
           return AVCaptureVideoOrientation.landscapeLeft
+        } else if UIApplication.shared.statusBarOrientation == .landscapeRight {
+          return AVCaptureVideoOrientation.landscapeRight
         } else {
           return AVCaptureVideoOrientation.portrait
         }

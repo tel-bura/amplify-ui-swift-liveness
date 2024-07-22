@@ -48,6 +48,7 @@ extension FaceLivenessDetectionViewModel: FaceDetectionResultHandler {
                     return
                 }
             case .recording(ovalDisplayed: false):
+                print("recording oval false")
                 drawOval(onComplete: {
                     self.sendInitialFaceDetectedEvent(
                         initialFace: normalizedFace.boundingBox,
@@ -56,6 +57,7 @@ extension FaceLivenessDetectionViewModel: FaceDetectionResultHandler {
                 })
             case .recording(ovalDisplayed: true):
                 guard let sessionConfiguration = sessionConfiguration else { return }
+                print("recording oval true")
                 let instruction = faceInOvalMatching.faceMatchState(
                     for: normalizedFace.boundingBox,
                     in: ovalRect,
@@ -68,6 +70,7 @@ extension FaceLivenessDetectionViewModel: FaceDetectionResultHandler {
                 )
             case .awaitingFaceInOvalMatch:
                 guard let sessionConfiguration = sessionConfiguration else { return }
+                print("recording awaitingFaceInOvalMatch")
                 let instruction = faceInOvalMatching.faceMatchState(
                     for: normalizedFace.boundingBox,
                     in: ovalRect,
@@ -108,22 +111,25 @@ extension FaceLivenessDetectionViewModel: FaceDetectionResultHandler {
     ) {
         DispatchQueue.main.async {
             switch instruction {
-            case .match:
-                self.livenessState.faceMatched()
-                self.faceMatchedTimestamp = Date().timestampMilliseconds
-                self.livenessViewControllerDelegate?.displayFreshness(colorSequences: colorSequences)
-                let generator = UINotificationFeedbackGenerator()
-                generator.notificationOccurred(.success)
-                self.noFitStartTime = nil
+                case .match:
+                    print("handleInstruction update to match")
+                    self.livenessState.faceMatched()
+                    self.faceMatchedTimestamp = Date().timestampMilliseconds
+                    self.livenessViewControllerDelegate?.displayFreshness(colorSequences: colorSequences)
+                    let generator = UINotificationFeedbackGenerator()
+                    generator.notificationOccurred(.success)
+                    self.noFitStartTime = nil
 
-            case .tooClose(_, let percentage),
-                    .tooFar(_, let percentage),
-                    .tooFarLeft(_, let percentage),
-                    .tooFarRight(_, let percentage):
-                self.handleNoFaceFit(instruction: instruction, percentage: percentage)
-            case .none:
-                self.handleNoFaceDetected()
-            }
+                case .tooClose(_, let percentage),
+                        .tooFar(_, let percentage),
+                        .tooFarLeft(_, let percentage),
+                        .tooFarRight(_, let percentage):
+                    print("handleInstruction too far")
+                    self.handleNoFaceFit(instruction: instruction, percentage: percentage)
+                case .none:
+                    print("handleInstruction none")
+                    self.handleNoFaceDetected()
+                }
         }
     }
     
