@@ -13,7 +13,7 @@ import Amplify
 
 final class _LivenessViewController: UIViewController {
     let viewModel: FaceLivenessDetectionViewModel
-    var previewLayer: CALayer!
+    var previewLayer: CALayer?
 
     let faceShapeLayer = CAShapeLayer()
     var ovalExists = false
@@ -37,15 +37,23 @@ final class _LivenessViewController: UIViewController {
             }
         }
     }
+    
+    deinit {
+        guard let previewLayer = self.previewLayer else { return }
+        previewLayer.removeFromSuperlayer()
+        (previewLayer as? AVCaptureVideoPreviewLayer)?.session = nil
+        self.previewLayer = nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         layoutSubviews()
+        setupAVLayer()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        setupAVLayer()
+    override func viewDidLayoutSubviews() {
+        previewLayer?.position = view.center
     }
 
     private func layoutSubviews() {
@@ -62,13 +70,14 @@ final class _LivenessViewController: UIViewController {
     }
 
     private func setupAVLayer() {
+        guard previewLayer == nil else { return }
         let x = view.frame.minX
         let y = view.frame.minY
         let width = view.frame.width
         let height = width / 3 * 4
         let cameraFrame = CGRect(x: x, y: y, width: width, height: height)
 
-        guard let avLayer = viewModel.startCamera(withinFrame: cameraFrame) else {
+        guard let avLayer = viewModel.configureCamera(withinFrame: cameraFrame) else {
             DispatchQueue.main.async {
                 self.viewModel.livenessState
                     .unrecoverableStateEncountered(.missingVideoPermission)
@@ -78,11 +87,15 @@ final class _LivenessViewController: UIViewController {
 
         avLayer.position = view.center
         self.previewLayer = avLayer
-        viewModel.cameraViewRect = previewLayer.frame
+        if let previewLayer = self.previewLayer {
+            viewModel.cameraViewRect = previewLayer.frame
+        }
 
         DispatchQueue.main.async {
             self.view.layer.insertSublayer(avLayer, at: 0)
             self.view.layoutIfNeeded()
+
+            self.viewModel.startSession()
         }
     }
 
@@ -141,18 +154,22 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
                 UIGraphicsEndImageContext()
 
                 // display image
+                guard let previewLayer = self.previewLayer else { return }
                 let imageView = CroppedImageView(image: newImage!)
-                imageView.frame = self.previewLayer.frame
+                imageView.frame = previewLayer.frame
                 imageView.clipsToBounds = true
                 self.view.addSubview(imageView)
-                self.previewLayer.removeFromSuperlayer()
+                (previewLayer as? AVCaptureVideoPreviewLayer)?.session = nil
+                previewLayer.removeFromSuperlayer()
                 self.viewModel.stopRecording()
             } else {
                 // display image
+                guard let previewLayer = self.previewLayer else { return }
                 let imageView = UIImageView(image: uiImage)
-                imageView.frame = self.previewLayer.frame
+                imageView.frame = previewLayer.frame
                 self.view.addSubview(imageView)
-                self.previewLayer.removeFromSuperlayer()
+                (previewLayer as? AVCaptureVideoPreviewLayer)?.session = nil
+                previewLayer.removeFromSuperlayer()
                 self.viewModel.stopRecording()
             }
         }
@@ -184,14 +201,15 @@ extension _LivenessViewController: FaceLivenessViewControllerPresenter {
 
     func drawOvalInCanvas(_ ovalRect: CGRect) {
         DispatchQueue.main.async {
+            guard let previewLayer = self.previewLayer else { return }
             self.faceGuideRect = ovalRect
 
             let ovalView = OvalView(
-                frame: self.previewLayer.frame,
+                frame: previewLayer.frame,
                 ovalFrame: ovalRect
             )
             self.ovalView = ovalView
-            ovalView.center = self.previewLayer.position
+            ovalView.center = previewLayer.position
             self.view.insertSubview(
                 ovalView,
                 belowSubview: self.freshnessView

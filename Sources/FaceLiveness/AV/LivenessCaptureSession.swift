@@ -11,19 +11,40 @@ import AVFoundation
 class LivenessCaptureSession {
     let captureDevice: LivenessCaptureDevice
     private let captureQueue = DispatchQueue(label: "com.amazonaws.faceliveness.cameracapturequeue")
-    let outputDelegate: OutputSampleBufferCapturer
+    private let configurationQueue = DispatchQueue(label: "com.amazonaws.faceliveness.sessionconfiguration", qos: .userInteractive)
+    let outputDelegate: AVCaptureVideoDataOutputSampleBufferDelegate
     var captureSession: AVCaptureSession?
+    
+    var outputSampleBufferCapturer: OutputSampleBufferCapturer? {
+        return outputDelegate as? OutputSampleBufferCapturer
+    }
 
-    init(captureDevice: LivenessCaptureDevice, outputDelegate: OutputSampleBufferCapturer) {
+    init(captureDevice: LivenessCaptureDevice, outputDelegate: AVCaptureVideoDataOutputSampleBufferDelegate) {
         self.captureDevice = captureDevice
         self.outputDelegate = outputDelegate
     }
 
-    func startSession(frame: CGRect) throws -> CALayer {
+    func configureCamera(frame: CGRect) throws -> CALayer {
+        try configureCamera()
+
+        guard let captureSession = captureSession else {
+            throw LivenessCaptureSessionError.captureSessionUnavailable
+        }
+        
+        let previewLayer = previewLayer(
+            frame: frame,
+            for: captureSession
+        )
+
+        return previewLayer
+    }
+    
+    func configureCamera() throws {
         guard let camera = captureDevice.avCaptureDevice
         else { throw LivenessCaptureSessionError.cameraUnavailable }
 
         let cameraInput = try AVCaptureDeviceInput(device: camera)
+        let videoOutput = AVCaptureVideoDataOutput()
 
         teardownExistingSession(input: cameraInput)
         captureSession = AVCaptureSession()
@@ -34,32 +55,38 @@ class LivenessCaptureSession {
 
         try setupInput(cameraInput, for: captureSession)
         captureSession.sessionPreset = captureDevice.preset
-
-        let videoOutput = AVCaptureVideoDataOutput()
         try setupOutput(videoOutput, for: captureSession)
-
         try captureDevice.configure()
-
-        DispatchQueue.global().async {
-            captureSession.startRunning()
-        }
-
-        let previewLayer = previewLayer(
-            frame: frame,
-            for: captureSession
-        )
 
         videoOutput.setSampleBufferDelegate(
             outputDelegate,
             queue: captureQueue
         )
+    }
 
-        return previewLayer
+    func startSession() {
+        guard let session = captureSession else { return }
+        configurationQueue.async {
+            session.startRunning()
+        }
     }
 
     func stopRunning() {
-        if captureSession?.isRunning == true {
-            captureSession?.stopRunning()
+        guard let session = captureSession else { return }
+        defer {
+            captureSession = nil
+        }
+
+        if session.isRunning {
+            session.stopRunning()
+        }
+
+        for input in session.inputs {
+            session.removeInput(input)
+        }
+        
+        for output in session.outputs {
+            session.removeOutput(output)
         }
     }
 
@@ -83,6 +110,11 @@ class LivenessCaptureSession {
         _ output: AVCaptureVideoDataOutput,
         for captureSession: AVCaptureSession
     ) throws {
+        if captureSession.canAddOutput(output) {
+            captureSession.addOutput(output)
+        } else {
+            throw LivenessCaptureSessionError.captureSessionOutputUnavailable
+        }
         output.videoSettings = [
             kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA
         ]
@@ -91,12 +123,7 @@ class LivenessCaptureSession {
             .filter(\.isVideoOrientationSupported)
             .forEach {
                 $0.videoOrientation = .portrait
-        }
-
-        if captureSession.canAddOutput(output) {
-            captureSession.addOutput(output)
-        } else {
-            throw LivenessCaptureSessionError.captureSessionOutputUnavailable
+                $0.isVideoMirrored = true
         }
     }
 
