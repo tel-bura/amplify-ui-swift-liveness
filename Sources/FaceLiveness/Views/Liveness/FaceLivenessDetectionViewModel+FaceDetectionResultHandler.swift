@@ -69,7 +69,8 @@ extension FaceLivenessDetectionViewModel: FaceDetectionResultHandler {
 
                 handleInstruction(
                     instruction,
-                    colorSequences: sessionConfiguration.colorChallenge.colors
+                    colorSequences: sessionConfiguration.colorChallenge.colors,
+                    onLog: onLog
                 )
             case .awaitingFaceInOvalMatch:
                 guard let sessionConfiguration = sessionConfiguration else { return }
@@ -82,7 +83,8 @@ extension FaceLivenessDetectionViewModel: FaceDetectionResultHandler {
                 )
                 handleInstruction(
                     instruction,
-                    colorSequences: sessionConfiguration.colorChallenge.colors
+                    colorSequences: sessionConfiguration.colorChallenge.colors,
+                    onLog: onLog
                 )
             default: break
 

@@ -60,7 +60,7 @@ class Instructor {
     func instruction(for update: Instruction) -> Instruction {
         onLog?("""
             Instruction update state: \(update)
-            Instruction previous state: \(previousInstruction ?? "nil")
+            Instruction previous state: \(String(describing: previousInstruction))
             runningCount: \(runningCount)
             maxRunningCount: \(maxRunningCount)
         """)
