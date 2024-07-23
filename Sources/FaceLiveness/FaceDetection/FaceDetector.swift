@@ -8,12 +8,12 @@
 import AVFoundation
 
 protocol FaceDetector {
-    func detectFaces(from buffer: CVPixelBuffer)
+    func detectFaces(from buffer: CVPixelBuffer, onLog: ((_ message: String) -> Void)?)
     func setResultHandler(detectionResultHandler: FaceDetectionResultHandler)
 }
 
 protocol FaceDetectionResultHandler: AnyObject {
-    func process(newResult: FaceDetectionResult)
+    func process(newResult: FaceDetectionResult, onLog: ((_ message: String) -> Void)?)
 }
 
 enum FaceDetectionResult {

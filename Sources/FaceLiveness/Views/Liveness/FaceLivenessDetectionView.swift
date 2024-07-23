@@ -52,7 +52,7 @@ public struct FaceLivenessDetectorView: View {
 
         let faceDetector = try! FaceDetectorShortRange.Model()
         let faceInOvalStateMatching = FaceInOvalMatching(
-            instructor: Instructor(maxRunningCount: maxRunningCount ?? 2),
+            instructor: Instructor(maxRunningCount: maxRunningCount ?? 2, onLog: onLog),
             ovalThreshold: ovalThreshold ?? 2.0,
             onLog: onLog
         )
@@ -73,7 +73,8 @@ public struct FaceLivenessDetectorView: View {
             captureDevice: .init(avCaptureDevice: avCpatureDevice),
             outputDelegate: OutputSampleBufferCapturer(
                 faceDetector: faceDetector,
-                videoChunker: videoChunker
+                videoChunker: videoChunker,
+                onLog: onLog
             )
         )
 
@@ -117,7 +118,7 @@ public struct FaceLivenessDetectorView: View {
         }
 
         let faceInOvalStateMatching = FaceInOvalMatching(
-            instructor: Instructor(maxRunningCount: maxRunningCount ?? 2),
+            instructor: Instructor(maxRunningCount: maxRunningCount ?? 2, onLog: onLog),
             ovalThreshold: ovalThreshold ?? 2.0,
             onLog: onLog
         )

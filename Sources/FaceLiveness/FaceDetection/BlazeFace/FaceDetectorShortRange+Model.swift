@@ -39,7 +39,7 @@ extension FaceDetectorShortRange {
             self.detectionResultHandler = detectionResultHandler
         }
 
-        func detectFaces(from buffer: CVPixelBuffer) {
+        func detectFaces(from buffer: CVPixelBuffer, onLog: ((_ message: String) -> Void)?) {
             let faces = prediction(for: buffer)
             let observationResult: FaceDetectionResult
             switch faces.count {
@@ -51,7 +51,7 @@ extension FaceDetectorShortRange {
                 observationResult = .noFace
             }
 
-            detectionResultHandler?.process(newResult: observationResult)
+            detectionResultHandler?.process(newResult: observationResult, onLog: onLog)
         }
 
         func prediction(for buffer: CVPixelBuffer) -> [DetectedFace] {

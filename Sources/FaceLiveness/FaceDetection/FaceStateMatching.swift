@@ -46,23 +46,16 @@ struct FaceInOvalMatching {
 
         if isMatch(face: face, oval: oval, intersection: intersection, thresholds: thresholds) {
             print("update to match")
+            printMatchResult(face: face, oval: oval, intersection: intersection, thresholds: thresholds, message: "isMatch")
+            onLog?("Face Capture State: face matched")
+            update = .match
+        } else if isTooClose(face: face, oval: oval, intersection: intersection, thresholds: thresholds) {
+            printMatchResult(face: face, oval: oval, intersection: intersection, thresholds: thresholds, message: "isTooClose")
+            onLog?("Face Capture State: face is too close, faceMatchPercentage \(faceMatchPercentage)")
+            update = .tooClose(nearnessPercentage: faceMatchPercentage)
+        } else {
             let message = """
-                oval minX \(oval.minX)
-                oval midX \(oval.midX)
-                oval maxX \(oval.maxX)
-                oval minY \(oval.minY)
-                oval midY \(oval.midY)
-                oval maxY \(oval.maxY)
-                oval width \(oval.width)
-                oval height \(oval.height)
-                face minX \(face.minX)
-                face midX \(face.midX)
-                face maxX \(face.maxX)
-                face minY \(face.minY)
-                face midY \(face.midY)
-                face maxY \(face.maxY)
-                face width \(face.width)
-                face height \(face.height)
+                isTooFar
                 intersection \(intersection)
                 thresholds intersection \(thresholds.intersection)
                 thresholds ovalMatchWidth \(thresholds.ovalMatchWidth)
@@ -74,15 +67,44 @@ struct FaceInOvalMatching {
             """
             print(message)
             onLog?(message)
-            update = .match
-        } else if isTooClose(face: face, oval: oval, intersection: intersection, thresholds: thresholds) {
-            update = .tooClose(nearnessPercentage: faceMatchPercentage)
-        } else {
+            onLog?("Face Capture State: face is too far, faceMatchPercentage \(faceMatchPercentage)")
             update = .tooFar(nearnessPercentage: faceMatchPercentage)
         }
 
         let instruction = instructor.instruction(for: update)
         return instruction
+    }
+
+    private func printMatchResult(face: CGRect, oval: CGRect, intersection: Double, thresholds: Thresholds, message: String) {
+        let message = """
+            \(message)
+            oval minX \(oval.minX)
+            oval midX \(oval.midX)
+            oval maxX \(oval.maxX)
+            oval minY \(oval.minY)
+            oval midY \(oval.midY)
+            oval maxY \(oval.maxY)
+            oval width \(oval.width)
+            oval height \(oval.height)
+            face minX \(face.minX)
+            face midX \(face.midX)
+            face maxX \(face.maxX)
+            face minY \(face.minY)
+            face midY \(face.midY)
+            face maxY \(face.maxY)
+            face width \(face.width)
+            face height \(face.height)
+            intersection \(intersection)
+            thresholds intersection \(thresholds.intersection)
+            thresholds ovalMatchWidth \(thresholds.ovalMatchWidth)
+            thresholds ovalMatchHeight \(thresholds.ovalMatchHeight)
+            thresholds faceDetectionWidth \(thresholds.faceDetectionWidth)
+            thresholds faceDetectionHeight \(thresholds.faceDetectionHeight)
+            initialIOU \(initialIOU)
+            faceMatchPercentage \(faceMatchPercentage)
+        """
+        print(message)
+        onLog?(message)
     }
 
     private func isTooClose(face: CGRect, oval: CGRect, intersection: Double, thresholds: Thresholds) -> Bool {
@@ -98,6 +120,7 @@ struct FaceInOvalMatching {
         && abs(oval.maxY - face.maxY) < thresholds.ovalMatchHeight
 
         print("isMatchResult \(isMatchResult)")
+        onLog?("isMatchResult \(isMatchResult)")
 
         return isMatchResult
     }

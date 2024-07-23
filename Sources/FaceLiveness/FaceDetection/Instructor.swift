@@ -11,11 +11,13 @@ class Instructor {
     init(
         maxRunningCount: Int = 2,
         previousInstruction: Instructor.Instruction? = nil,
-        runningCount: Int = 0
+        runningCount: Int = 0,
+        onLog: ((_ message: String) -> Void)? = nil
     ) {
         self.maxRunningCount = maxRunningCount
         self.previousInstruction = previousInstruction
         self.runningCount = runningCount
+        self.onLog = onLog
     }
 
     enum Instruction: Equatable {
@@ -53,15 +55,25 @@ class Instructor {
     var previousInstruction: Instruction?
     var runningCount = 0
     var maxRunningCount = 2
+    var onLog: ((_ message: String) -> Void)?
 
     func instruction(for update: Instruction) -> Instruction {
+        onLog?("""
+            Instruction update state: \(update)
+            Instruction previous state: \(previousInstruction ?? "nil")
+            runningCount: \(runningCount)
+            maxRunningCount: \(maxRunningCount)
+        """)
         if previousInstruction == update {
             runningCount += 1
             if runningCount >= maxRunningCount {
+                onLog?("running count completed")
                 return update
             }
+            onLog?("running count continue")
             return .none
         } else {
+            onLog?("running count reset")
             previousInstruction = update
             runningCount = 0
         }

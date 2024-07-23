@@ -11,10 +11,12 @@ import CoreImage
 class OutputSampleBufferCapturer: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     let faceDetector: FaceDetector
     let videoChunker: VideoChunker
+    let onLog: ((_ message: String) -> Void)?
 
-    init(faceDetector: FaceDetector, videoChunker: VideoChunker) {
+    init(faceDetector: FaceDetector, videoChunker: VideoChunker, onLog: ((_ message: String) -> Void)? = nil) {
         self.faceDetector = faceDetector
         self.videoChunker = videoChunker
+        self.onLog = onLog
     }
 
     func captureOutput(
@@ -27,6 +29,6 @@ class OutputSampleBufferCapturer: NSObject, AVCaptureVideoDataOutputSampleBuffer
         guard let imageBuffer = sampleBuffer.imageBuffer
         else { return }
 
-        faceDetector.detectFaces(from: imageBuffer)
+        faceDetector.detectFaces(from: imageBuffer, onLog: onLog)
     }
 }
