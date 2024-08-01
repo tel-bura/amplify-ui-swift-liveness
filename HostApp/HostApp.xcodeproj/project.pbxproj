@@ -32,6 +32,15 @@
 		909308CD297DC4E700F3CC6E /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909308CB297DC4E700F3CC6E /* UIColor+Hex.swift */; };
 		909308D1297EE67100F3CC6E /* ExampleLivenessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 909308D0297EE67100F3CC6E /* ExampleLivenessView.swift */; };
 		90FDF2A5299BDF3E0002CE7D /* CreateSessionResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FDF2A4299BDF3E0002CE7D /* CreateSessionResponse.swift */; };
+		973619222BA378200003A590 /* FaceLiveness in Frameworks */ = {isa = PBXBuildFile; productRef = 973619212BA378200003A590 /* FaceLiveness */; };
+		97D1A8E92BA3757700FF1368 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 97D1A8E82BA3757700FF1368 /* AWSAPIPlugin */; };
+		97D1A8EB2BA3757700FF1368 /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = 97D1A8EA2BA3757700FF1368 /* AWSCognitoAuthPlugin */; };
+		97D1A8ED2BA3757700FF1368 /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = 97D1A8EC2BA3757700FF1368 /* Amplify */; };
+		C07C03D52C5BACBC002F9C6E /* FaceLivenessService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07C03D42C5BACBC002F9C6E /* FaceLivenessService.swift */; };
+		C07C03D72C5BACD3002F9C6E /* Queries.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07C03D62C5BACD3002F9C6E /* Queries.swift */; };
+		C07C03D92C5BAFDB002F9C6E /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07C03D82C5BAFDB002F9C6E /* APIClient.swift */; };
+		C07C03DB2C5BAFF5002F9C6E /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07C03DA2C5BAFF5002F9C6E /* StringUtils.swift */; };
+		C07C03DD2C5BBB0B002F9C6E /* VirdeeCredentialsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C07C03DC2C5BBB0B002F9C6E /* VirdeeCredentialsProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +87,12 @@
 		909308CB297DC4E700F3CC6E /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		909308D0297EE67100F3CC6E /* ExampleLivenessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleLivenessView.swift; sourceTree = "<group>"; };
 		90FDF2A4299BDF3E0002CE7D /* CreateSessionResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSessionResponse.swift; sourceTree = "<group>"; };
+		97D1A8EE2BA375AA00FF1368 /* amplify-ui-swift-liveness */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "amplify-ui-swift-liveness"; path = ..; sourceTree = "<group>"; };
+		C07C03D42C5BACBC002F9C6E /* FaceLivenessService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceLivenessService.swift; sourceTree = "<group>"; };
+		C07C03D62C5BACD3002F9C6E /* Queries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queries.swift; sourceTree = "<group>"; };
+		C07C03D82C5BAFDB002F9C6E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		C07C03DA2C5BAFF5002F9C6E /* StringUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
+		C07C03DC2C5BBB0B002F9C6E /* VirdeeCredentialsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirdeeCredentialsProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +134,7 @@
 		9070FF97285112B4009867D5 = {
 			isa = PBXGroup;
 			children = (
+				97D1A8EE2BA375AA00FF1368 /* amplify-ui-swift-liveness */,
 				9070FFA2285112B4009867D5 /* HostApp */,
 				9070FFBD285112B5009867D5 /* HostAppUITests */,
 				9070FFA1285112B4009867D5 /* Products */,
@@ -181,6 +197,10 @@
 				909308C4297DC49C00F3CC6E /* LivenessResultContentView.swift */,
 				906AB82F29EA0DC5007FFC81 /* LivenessResultContentView+Result.swift */,
 				909308C3297DC49C00F3CC6E /* LivenessResultView.swift */,
+				C07C03D42C5BACBC002F9C6E /* FaceLivenessService.swift */,
+				C07C03D62C5BACD3002F9C6E /* Queries.swift */,
+				C07C03D82C5BAFDB002F9C6E /* APIClient.swift */,
+				C07C03DC2C5BBB0B002F9C6E /* VirdeeCredentialsProvider.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -192,6 +212,7 @@
 				909308CB297DC4E700F3CC6E /* UIColor+Hex.swift */,
 				906AB82129E9F432007FFC81 /* View+Background.swift */,
 				906AB82529E9F554007FFC81 /* Color+DynamicColors.swift */,
+				C07C03DA2C5BAFF5002F9C6E /* StringUtils.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -347,9 +368,13 @@
 			files = (
 				906AB82829EA04B5007FFC81 /* ExampleLivenessViewModel.swift in Sources */,
 				906AB83029EA0DC5007FFC81 /* LivenessResultContentView+Result.swift in Sources */,
+				C07C03DD2C5BBB0B002F9C6E /* VirdeeCredentialsProvider.swift in Sources */,
 				909308CD297DC4E700F3CC6E /* UIColor+Hex.swift in Sources */,
+				C07C03D92C5BAFDB002F9C6E /* APIClient.swift in Sources */,
 				90493F822992D64000CFE674 /* LivenessResult.swift in Sources */,
 				906AB82229E9F432007FFC81 /* View+Background.swift in Sources */,
+				C07C03DB2C5BAFF5002F9C6E /* StringUtils.swift in Sources */,
+				C07C03D52C5BACBC002F9C6E /* FaceLivenessService.swift in Sources */,
 				906AB82C29EA0BFD007FFC81 /* StartSessionViewModel.swift in Sources */,
 				909308C5297DC49C00F3CC6E /* LivenessCheckErrorContentView.swift in Sources */,
 				906AB82A29EA0927007FFC81 /* StartSessionView+PresentationState.swift in Sources */,
@@ -362,6 +387,7 @@
 				909308CC297DC4E700F3CC6E /* Color+Hex.swift in Sources */,
 				906AB82429E9F48C007FFC81 /* StartSessionView.swift in Sources */,
 				904CC73D2996E650002E0753 /* RootView.swift in Sources */,
+				C07C03D72C5BACD3002F9C6E /* Queries.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,7 +546,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"HostApp/Preview Content\"";
-				DEVELOPMENT_TEAM = W3DRXD72QU;
+				DEVELOPMENT_TEAM = 59R69XQQ8H;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HostApp/Info.plist;
@@ -530,13 +556,14 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.amazonaws.mobile.amplify.liveness.testing.hostapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telbura.test.faceliveness;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG LANDMARK_DEBUG_MODE";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -554,7 +581,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"HostApp/Preview Content\"";
-				DEVELOPMENT_TEAM = W3DRXD72QU;
+				DEVELOPMENT_TEAM = 59R69XQQ8H;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = HostApp/Info.plist;
@@ -564,13 +591,14 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.amazonaws.mobile.amplify.liveness.testing.hostapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.telbura.test.faceliveness;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
