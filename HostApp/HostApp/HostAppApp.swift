@@ -8,8 +8,8 @@
 import SwiftUI
 import FaceLiveness
 import Amplify
-import AWSCognitoAuthPlugin
-import AWSAPIPlugin
+//import AWSCognitoAuthPlugin
+//import AWSAPIPlugin
 
 @main
 struct HostAppApp: App {
@@ -25,17 +25,17 @@ struct HostAppApp: App {
         }
     }
 
-    init() {
-        do {
-            let auth = AWSCognitoAuthPlugin()
-            let api = AWSAPIPlugin()
-            try Amplify.add(plugin: auth)
-            try Amplify.add(plugin: api)
-            try Amplify.configure()
-        } catch {
-            print("Error configuring Amplify", error)
-        }
-    }
+//    init() {
+//        do {
+//            let auth = AWSCognitoAuthPlugin()
+//            let api = AWSAPIPlugin()
+//            try Amplify.add(plugin: auth)
+//            try Amplify.add(plugin: api)
+//            try Amplify.configure()
+//        } catch {
+//            print("Error configuring Amplify", error)
+//        }
+//    }
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
