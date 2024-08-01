@@ -22,6 +22,7 @@ struct ExampleLivenessView: View {
         case .liveness:
             FaceLivenessDetectorView(
                 sessionID: viewModel.sessionID,
+                credentialsProvider: VirdeeCredentialsProvider.init(apiUrl: "https://backend-dev.virdee.co/graphql", kioskToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjYzI1MjkwYS00NWZjLTQ4NTgtYmJhNC0xMGEyYjMyZjY4OTciLCJpYXQiOjE3MjI0NDg0NDJ9.SfSQIK5_w6H0k6v17Idspm-qouV-KuZaW8mSaPSBPOo", userToken: nil, userId: "19d66d9e-e4ca-42a7-98b3-a7dfd90bfd74"),
                 region: "us-east-1",
                 isPresented:  Binding(
                     get: { viewModel.presentationState == .liveness },

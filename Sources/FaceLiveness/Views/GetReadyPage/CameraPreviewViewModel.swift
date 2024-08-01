@@ -40,7 +40,7 @@ class CameraPreviewViewModel: NSObject, ObservableObject {
             try previewCaptureSession?.configureCamera()
             previewCaptureSession?.startSession()
         } catch {
-            Amplify.Logging.default.error("Error starting preview capture session with error: \(error)")
+//            Amplify.Logging.default.error("Error starting preview capture session with error: \(error)")
         }
     }
 
