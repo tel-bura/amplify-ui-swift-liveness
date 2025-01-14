@@ -30,7 +30,7 @@ final class MockLivenessCaptureSession: LivenessCaptureSession {
         displayLink?.invalidate()
     }
     
-    override func startSession(frame: CGRect) throws -> CALayer {
+    override func configureCamera(frame: CGRect) throws -> CALayer {
         videoRenderView = VideoRenderView(frame: frame)
         let asset = AVAsset(url: inputFile)
         // Setup display link
@@ -95,10 +95,10 @@ final class MockLivenessCaptureSession: LivenessCaptureSession {
                                                sampleTiming: &timingInfo,
                                                sampleBufferOut: &sampleBuffer)
             if let sampleBuffer = sampleBuffer {
-                self.outputDelegate.videoChunker.consume(sampleBuffer)
-                guard let imageBuffer = sampleBuffer.rotateRightUpMirrored()
+                self.outputSampleBufferCapturer?.videoChunker.consume(sampleBuffer)
+                guard let imageBuffer = sampleBuffer.imageBuffer
                 else { return }
-                self.outputDelegate.faceDetector.detectFaces(from: imageBuffer)
+                self.outputSampleBufferCapturer?.faceDetector.detectFaces(from: imageBuffer)
             }
         }
     }

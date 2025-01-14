@@ -24,7 +24,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
     var closeButtonAction: () -> Void
     let videoChunker: VideoChunker
     let sessionID: String
-    var livenessService: LivenessService!
+    var livenessService: LivenessService?
     let faceDetector: FaceDetector
     let faceInOvalMatching: FaceInOvalMatching
     let challengeID: String = UUID().uuidString
@@ -90,7 +90,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
     }
 
     func registerServiceEvents() {
-        livenessService.register(onComplete: { [weak self] reason in
+        livenessService?.register(onComplete: { [weak self] reason in
             self?.stopRecording()
 
             switch reason {
@@ -106,7 +106,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
             }
         })
 
-        livenessService.register(
+        livenessService?.register(
             listener: { [weak self] _sessionConfiguration in
                 self?.sessionConfiguration = _sessionConfiguration
             },
@@ -115,20 +115,24 @@ class FaceLivenessDetectionViewModel: ObservableObject {
     }
 
     @objc func willResignActive(_ notification: Notification) {
+        guard self.livenessState.state != .initial else { return }
         DispatchQueue.main.async {
             self.stopRecording()
             self.livenessState.unrecoverableStateEncountered(.viewResignation)
         }
     }
 
+    func startSession() {
+        captureSession.startSession()
+    }
 
     func stopRecording() {
         captureSession.stopRunning()
     }
 
-    func startCamera(withinFrame frame: CGRect) -> CALayer? {
+    func configureCamera(withinFrame frame: CGRect) -> CALayer? {
         do {
-            let avLayer = try captureSession.startSession(frame: frame)
+            let avLayer = try captureSession.configureCamera(frame: frame)
             DispatchQueue.main.async {
                 self.livenessState.checkIsFacePrepared()
             }
@@ -174,7 +178,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
 
     func initializeLivenessStream() {
         do {
-            try livenessService.initializeLivenessStream(
+            try livenessService?.initializeLivenessStream(
                 withSessionID: sessionID,
                 userAgent: UserAgentValues.standard().userAgentString
             )
@@ -197,7 +201,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         )
 
         do {
-            try livenessService.send(
+            try livenessService?.send(
                 .freshness(event: freshnessEvent),
                 eventDate: { .init() }
             )
@@ -238,7 +242,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         initialClientEvent = _initialClientEvent
 
         do {
-            try livenessService.send(
+            try livenessService?.send(
                 .initialFaceDetected(event: _initialClientEvent),
                 eventDate: { .init() }
             )
@@ -270,7 +274,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         )
 
         do {
-            try livenessService.send(
+            try livenessService?.send(
                 .final(event: finalClientEvent),
                 eventDate: { .init() }
             )
@@ -288,27 +292,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         }
     }
 
-    func sendVideoEvent(data: Data, videoEventTime: UInt64, n: UInt8 = 1) {
-        guard !hasSentFinalVideoEvent else { return }
-        let eventDate = Date()
-        let timestamp = eventDate.timestampMilliseconds
-
-        let videoEvent = VideoEvent.init(chunk: data, timestamp: timestamp)
-
-        do {
-            try livenessService.send(
-                .video(event: videoEvent),
-                eventDate: { eventDate }
-            )
-        } catch {
-            DispatchQueue.main.async {
-                self.livenessState.unrecoverableStateEncountered(.unknown)
-            }
-        }
-    }
-
-    func sendFinalVideoChunk(data: Data, videoEventTime: UInt64) {
-        sendVideoEvent(data: data, videoEventTime: videoEventTime)
+    func sendFinalVideoEvent() {
         sendFinalEvent(
             targetFaceRect: faceGuideRect,
             viewSize: videoSize,
@@ -335,7 +319,7 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         let videoEvent = VideoEvent.init(chunk: data, timestamp: timestamp)
 
         do {
-            try livenessService.send(
+            try livenessService?.send(
                 .video(event: videoEvent),
                 eventDate: { eventDate }
             )
@@ -354,8 +338,8 @@ class FaceLivenessDetectionViewModel: ObservableObject {
         switch captureSessionError {
         case LivenessCaptureSessionError.cameraUnavailable,
             LivenessCaptureSessionError.deviceInputUnavailable:
-
-            livenessError = .missingVideoPermission
+            let authStatus = AVCaptureDevice.authorizationStatus(for: .video)
+            livenessError = authStatus == .authorized ? .cameraNotAvailable : .missingVideoPermission
         case LivenessCaptureSessionError.captureSessionOutputUnavailable,
             LivenessCaptureSessionError.captureSessionInputUnavailable:
 

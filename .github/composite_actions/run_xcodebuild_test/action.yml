@@ -5,6 +5,8 @@ inputs:
   scheme:
     required: true
     type: string
+  token:
+    required: true
   project_path:
     required: false
     type: string
@@ -47,20 +49,28 @@ runs:
         coverageFlags=""
         if [ "${{ inputs.generate_coverage }}" == "true" ]; then
           echo "Code Coverage is enabled!"
-          coverageFlags+="-derivedDataPath Build/ -clonedSourcePackagesDirPath "~/Library/Developer/Xcode/DerivedData/$SCHEME" -enableCodeCoverage YES build test"
+          coverageFlags+="-derivedDataPath Build/ -clonedSourcePackagesDirPath "~/Library/Developer/Xcode/DerivedData/$SCHEME" -enableCodeCoverage YES"
         fi
         xcode-select -p
         xcodebuild -version
-        xcodebuild test -scheme $SCHEME -sdk '${{ inputs.sdk }}' -destination '${{ inputs.destination }}' ${{ inputs.other_flags }} $coverageFlags | xcpretty --simple --color --report junit && exit ${PIPESTATUS[0]}
+        xcodebuild test -scheme $SCHEME -sdk '${{ inputs.sdk }}' -destination '${{ inputs.destination }}' ${{ inputs.other_flags }} $coverageFlags | xcbeautify --renderer github-actions && exit ${PIPESTATUS[0]}
       shell: bash
 
     - name: Generate Coverage report
       if: ${{ inputs.generate_coverage == 'true' }}
+      env:
+        SCHEME: ${{ inputs.scheme }}
       run: |
         echo "Generating Coverage report..."
         cd Build/Build/ProfileData
         cd $(ls -d */|head -n 1)
         pathCoverage=Build/Build/ProfileData/${PWD##*/}/Coverage.profdata
-        cd ../../../../
-        xcrun llvm-cov export -format="lcov" -instr-profile $pathCoverage Build/Build/Products/Debug-iphonesimulator/$SCHEME.o > Coverage.lcov
+        cd ${{ github.workspace }}
+        xcrun llvm-cov export -format="lcov" -instr-profile $pathCoverage Build/Build/Products/Debug-${{ inputs.sdk }}/${SCHEME}Tests.xctest/${SCHEME}Tests > $SCHEME-Coverage.lcov
       shell: bash
+
+    - name: Upload Report
+      if: ${{ inputs.generate_coverage == 'true' }}
+      uses: codecov/codecov-action@84508663e988701840491b86de86b666e8a86bed # v4.3.0
+      with:
+        token: ${{ inputs.token }}

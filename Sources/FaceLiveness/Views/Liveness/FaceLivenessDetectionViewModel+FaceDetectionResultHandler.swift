@@ -28,7 +28,7 @@ extension FaceLivenessDetectionViewModel: FaceDetectionResultHandler {
             }
         case .singleFace(let face):
             var normalizedFace = normalizeFace(face)
-            normalizedFace.boundingBox = normalizedFace.boundingBoxFromLandmarks()
+            normalizedFace.boundingBox = normalizedFace.boundingBoxFromLandmarks(ovalRect: ovalRect)
 
             switch livenessState.state {
             case .pendingFacePreparedConfirmation:
@@ -111,14 +111,15 @@ extension FaceLivenessDetectionViewModel: FaceDetectionResultHandler {
     ) {
         DispatchQueue.main.async {
             switch instruction {
-                case .match:
-                    print("handleInstruction update to match")
-                    self.livenessState.faceMatched()
-                    self.faceMatchedTimestamp = Date().timestampMilliseconds
+            case .match:
+                self.livenessState.faceMatched()
+                self.faceMatchedTimestamp = Date().timestampMilliseconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                     self.livenessViewControllerDelegate?.displayFreshness(colorSequences: colorSequences)
-                    let generator = UINotificationFeedbackGenerator()
-                    generator.notificationOccurred(.success)
-                    self.noFitStartTime = nil
+                }
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+                self.noFitStartTime = nil
 
                 case .tooClose(_, let percentage),
                         .tooFar(_, let percentage),
